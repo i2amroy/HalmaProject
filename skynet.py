@@ -31,7 +31,7 @@ def alphabeta_search(game, d=5, cutoff_test=None, eval_fn=None):
             beta = min(beta, v)
         return v
 
-    cutoff_test = lambda state, depth: time.time() - game.start_time > 30 or depth > d or game.win_check(state)
+    cutoff_test = lambda state, depth: time.time() - game.start_time > 45 or depth > d or game.win_check(state)
     eval_fn = eval_fn or game.heuristic
     seq = game.successors(game.active_player, game.pieces)
     best = seq[0]

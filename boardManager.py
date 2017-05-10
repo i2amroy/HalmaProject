@@ -252,6 +252,7 @@ class GameBoard(Frame):
     def end_turn(self):
         # Reset all of our variables for the next player
         self.has_moved = False
+        pp.pprint(self.pieces)
         if self.active_player == 1:
             self.active_player = 2
             self.root.wm_title("Halma Game: Player 2 to Move")
@@ -421,7 +422,15 @@ class GameBoard(Frame):
 
 
 def heuristic1(state, player):
-    return random.randint(0, 10)
+    size = len(state)
+    goal_x = size-1 if player == 1 else 0
+    goal_y = 0 if player == 1 else size-1
+    score = 0
+    for i in range(size):
+        for j in range(size):
+            if state[i][j] == player:
+                score += abs(goal_x - i) + abs(goal_y - j)
+    return -score
 
 
 def heuristic2(state, player):
@@ -433,7 +442,6 @@ def heuristic2(state, player):
         for j in range(size):
             if state[i][j] == player:
                 score += abs(goal_x - i) + abs(goal_y - j)
-    print(-score)
     return -score
 
 if __name__ == "__main__":
@@ -445,7 +453,7 @@ if __name__ == "__main__":
     Grid.rowconfigure(root, 0, weight=1)
     Grid.columnconfigure(root, 0, weight=1)
     # Initialize the board with no inputs.
-    board = GameBoard(root, heuristic_p2=heuristic2)
+    board = GameBoard(root, heuristic_p1=heuristic2)
     root.after(1000, board.is_ai_first)
     # Run the board mainloop
     root.mainloop()
